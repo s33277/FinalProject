@@ -11,9 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Abstractions\" />
-      <Folder Include="DTOs\" />
-      <Folder Include="Services\" />
+      <ProjectReference Include="..\RevenueRecognitionSystem.Data\RevenueRecognitionSystem.Data.csproj" />
     </ItemGroup>
 
 </Project>

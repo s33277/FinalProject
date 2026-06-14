@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
-
-namespace RevenueRecognitionSystem.Data.Entities;
+namespace RevenueRecognitionSystem.Data.Entities.Authentication;
 
 public class User
 {

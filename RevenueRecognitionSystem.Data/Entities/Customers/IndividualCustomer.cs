@@ -1,4 +1,4 @@
-﻿namespace RevenueRecognitionSystem.Data.Entities;
+namespace RevenueRecognitionSystem.Data.Entities.Customers;
 
 public class IndividualCustomer : Customer
 {

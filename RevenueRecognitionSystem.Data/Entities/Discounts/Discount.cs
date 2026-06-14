@@ -1,4 +1,4 @@
-﻿namespace RevenueRecognitionSystem.Data.Entities.SoftwareNDiscounts;
+namespace RevenueRecognitionSystem.Data.Entities.Discounts;
 
 public class Discount
 {
