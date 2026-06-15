@@ -13,6 +13,7 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
         builder.Property(c => c.Address).IsRequired().HasMaxLength(300);
         builder.Property(c => c.Email).IsRequired().HasMaxLength(254);
         builder.Property(c => c.PhoneNumber).IsRequired().HasMaxLength(30);
+        builder.HasQueryFilter(c => !c.IsDeleted);
 
         builder.HasDiscriminator<string>("CustomerType")
             .HasValue<IndividualCustomer>("Individual")

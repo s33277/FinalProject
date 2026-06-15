@@ -14,6 +14,5 @@ public class IndividualCustomerConfiguration : IEntityTypeConfiguration<Individu
         builder.Property(c => c.Pesel).IsRequired().HasMaxLength(11);
         builder.HasIndex(c=>c.Pesel).IsUnique();
         builder.Property(c => c.Pesel).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
-        builder.HasQueryFilter(c => !c.IsDeleted);
     }
 }
