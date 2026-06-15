@@ -8,6 +8,13 @@ namespace RevenueRecognitionSystem.API.Services;
 
 public class RevenueService : IRevenueService
 {
+    private static readonly Dictionary<string, decimal> CurrencyRates = new()
+    {
+        ["PLN"] = 1m,
+        ["EUR"] = 0.23m,
+        ["USD"] = 0.25m
+    };
+
     private readonly AppDbContext _dbContext;
 
     public RevenueService(AppDbContext dbContext)
@@ -17,29 +24,32 @@ public class RevenueService : IRevenueService
 
     public async Task<RevenueResponse?> GetCurrentRevenueAsync(RevenueCalculationRequest request)
     {
-        if (!IsSupportedCurrency(request.Currency))
+        var currency = request.Currency.ToUpperInvariant();
+        if (!IsSupportedCurrency(currency))
         {
             return null;
         }
 
         var amount = await CalculateCurrentRevenueAsync(request.SoftwareId);
-        return new RevenueResponse(amount, request.Currency);
+        return new RevenueResponse(ConvertCurrency(amount, currency), currency);
     }
 
     public async Task<RevenueResponse?> GetPredictedRevenueAsync(RevenueCalculationRequest request)
     {
-        if (!IsSupportedCurrency(request.Currency))
+        var currency = request.Currency.ToUpperInvariant();
+        if (!IsSupportedCurrency(currency))
         {
             return null;
         }
 
         var amount = await CalculatePredictedRevenueAsync(request.SoftwareId);
-        return new RevenueResponse(amount, request.Currency);
+        return new RevenueResponse(ConvertCurrency(amount, currency), currency);
     }
 
     public async Task<RevenueSummaryResponse?> GetRevenueSummaryAsync(RevenueCalculationRequest request)
     {
-        if (!IsSupportedCurrency(request.Currency))
+        var currency = request.Currency.ToUpperInvariant();
+        if (!IsSupportedCurrency(currency))
         {
             return null;
         }
@@ -47,7 +57,10 @@ public class RevenueService : IRevenueService
         var currentRevenue = await CalculateCurrentRevenueAsync(request.SoftwareId);
         var predictedRevenue = await CalculatePredictedRevenueAsync(request.SoftwareId);
 
-        return new RevenueSummaryResponse(currentRevenue, predictedRevenue, request.Currency);
+        return new RevenueSummaryResponse(
+            ConvertCurrency(currentRevenue, currency),
+            ConvertCurrency(predictedRevenue, currency),
+            currency);
     }
 
     private async Task<decimal> CalculateCurrentRevenueAsync(int? softwareId)
@@ -97,6 +110,11 @@ public class RevenueService : IRevenueService
 
     private static bool IsSupportedCurrency(string currency)
     {
-        return currency == "PLN";
+        return CurrencyRates.ContainsKey(currency);
+    }
+
+    private static decimal ConvertCurrency(decimal amount, string currency)
+    {
+        return decimal.Round(amount * CurrencyRates[currency], 2);
     }
 }
