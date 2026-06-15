@@ -43,7 +43,7 @@ public class AuthService : IAuthService
     private string CreateToken(User user)
     {
         var secret = _configuration["Jwt:Secret"] ??
-                     "development-secret-key-change-before-production-123456";
+                     "super-mega-secret-key-12345-development";
         var issuer = _configuration["Jwt:Issuer"] ?? "RevenueRecognitionSystem";
         var audience = _configuration["Jwt:Audience"] ?? "RevenueRecognitionSystem";
 

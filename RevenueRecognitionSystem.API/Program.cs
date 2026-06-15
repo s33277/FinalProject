@@ -36,6 +36,7 @@ builder.Services.AddSwaggerGen(options =>
             new List<string>()
         }
     });
+    options.OperationFilter<AllowAnonymousOperationFilter>();
 });
 builder.Services.AddValidatorsFromAssemblyContaining<CreateIndividualCustomerRequest>();
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -47,7 +48,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var jwtSecret = builder.Configuration["Jwt:Secret"] ??
-                "super-mega-secret-key-12345";
+                "super-mega-secret-key-12345-development";
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "RevenueRecognitionSystem";
 var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "RevenueRecognitionSystem";
 
@@ -65,6 +66,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret))
         };
     });
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
